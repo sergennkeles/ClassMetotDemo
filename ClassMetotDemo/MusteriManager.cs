@@ -7,20 +7,20 @@ namespace ClassMetotDemo
     class MusteriManager
     {
  
-        public void MusteriEkle()
+        public void MusteriEkle(Musteri musteri)
         {
            
             
             string ad, tipi;
             int tc,sayac;
 
-            Console.Write("Kaç tane müşteri eklemek istiyorsunuz? ");// kullanıcıdan kaç tane kayıt gireceği bilgisini aldık.
-            sayac = Convert.ToInt32(Console.ReadLine());
-            Musteri[] musteriler = new Musteri[sayac];//diziye sayac sayısı kadar eleman ekleneceğini belirttik.
-
+           Console.Write("Kaç tane müşteri eklemek istiyorsunuz? ");// kullanıcıdan kaç tane kayıt gireceği bilgisini aldık.
+           sayac = Convert.ToInt32(Console.ReadLine());
+            //  Musteri[] musteriler = new Musteri[sayac];//diziye sayac sayısı kadar eleman ekleneceğini belirttik.
+            List<Musteri> musteriler = new List<Musteri> { };
             for (int i = 0; i < sayac; i++)//döngü sayac sayısı kadar çalışacak
             {
-                Musteri musteri = new Musteri();// her yeni kayıt için musteri class'ını newledik
+                 musteri = new Musteri();// her yeni kayıt için musteri class'ını newledik
                 Console.Write("Müşteri TC'si: ");//müşteri tc bilgisini aldık.
                 tc = Convert.ToInt32(Console.ReadLine());
                 musteri.TcNo = tc;
@@ -32,26 +32,18 @@ namespace ClassMetotDemo
                 Console.Write("Müşteri Bireysel mi ? Kurumsal mı? : ");//müşteri tipini aldık
                 tipi = Console.ReadLine();
                 musteri.MusteriTipi = tipi;
-                musteriler[i] =musteri;//musteriler dizisinin i'nci elemanına musteri classındaki bilgilerimizi aktardık.
+                musteriler.Add(musteri);//musteriler dizisinin i'nci elemanına musteri classındaki bilgilerimizi aktardık.
               
 
             }
             TumMusteriler(musteriler);// TumMusteriler methodu ile Müşteriler dizisindeki elemanları ekranda göster.
-            
+           Sil(musteriler);
 
         }
 
-        public void TumMusteriler(Musteri[] musteriler)
+        public void TumMusteriler(List<Musteri> musteriler)
         {
-            string cevap;
-            Console.Write("Müşteriler bu şekilde kaydedildi. Silmek istediğiniz bir kayıt var mı ? e/h :");
-            cevap = Console.ReadLine();
-            if (cevap == "e")
-            {
-                Sil(musteriler);
-            }
-            else
-            {
+          
                 //musteriler dizisindeki elemanları listele ve aşağıdakim mesajı ekrana yazdır.
                 foreach (var item in musteriler)
                 {
@@ -59,41 +51,44 @@ namespace ClassMetotDemo
                     Console.WriteLine("Tc No'su " + item.TcNo + " olan " + item.AdSoyad + " adlı müşterinin müşteri tipi " + item.MusteriTipi + " olarak ayarlandı.");
 
                 }
-            }
+            
         
         }
 
-        public void Sil(Musteri[] musteriler)
+        public void Sil(List<Musteri> musteriler)
         {
             int sil;
-           
+            string cevap;
+          
+            Console.WriteLine();
+            Console.Write("Müşteriler bu şekilde kaydedildi. Silmek istediğiniz bir kayıt var mı ? e/h :");
+            cevap = Console.ReadLine();
+
+            if (cevap == "e")
+            {
                 Console.Write("Silmek istediğiniz kaydın id numarasını giriniz: ");
                 sil = Convert.ToInt32(Console.ReadLine());
-            if (sil>musteriler.Length)
-            {
-                Console.WriteLine("Böyle bir kayıt yok!!!!");
-                TumMusteriler(musteriler);
+
+                if (sil > musteriler.Count)
+                {
+                    Console.WriteLine("Böyle bir kayıt yok!!!!");
+                    TumMusteriler(musteriler);
+                }
+                else
+                {
+
+                    musteriler.RemoveRange(sil, sil);
+                    TumMusteriler(musteriler);
+
+                   
+                }
             }
             else
             {
-                if (Array.IndexOf(musteriler, sil) == -1)// sil değişkenine girilen no, musteriler dizisinde var mı?
-                {
-                    Array.Clear(musteriler, sil, 1);// eğer varsa musteriler dizisinin sil değişkenine girilen sayısal ne ise o elemanını sil.
-                    Console.WriteLine(sil + " no'lu kayıt silindi ");// aslında burada TumMusteriler(musteriler) methodunu çağırıp
-                    //kalan müşterileri listelemek istedim. Fakat silme işleminden sonra musteriler dizisinde null kalan değer yüzünden
-                    //sürekli hata aldım. Hatayı gideremediğim için bu şekilde mesaj vermekle yetindim. 82.satıra breakpoint atarak 
-                    //kaydın gerçekten silinip silinmediğini kontrol edebilirsiniz.
 
-                }
+                TumMusteriler(musteriler);
             }
-               
-           
-                
-            
-         
-
         }
-
 
     }
 }

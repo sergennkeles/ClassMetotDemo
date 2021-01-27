@@ -8,8 +8,9 @@ namespace ClassMetotDemo
         {
         
             MusteriManager musteriManager = new MusteriManager();
+            Musteri musteri = new Musteri();
             
-            musteriManager.MusteriEkle();// methodumuz ile musteriManagerdeki işlemlerimizi yaptırıyoruz.
+            musteriManager.MusteriEkle(musteri);// methodumuz ile musteriManagerdeki işlemlerimizi yaptırıyoruz.
 
         }
     }
